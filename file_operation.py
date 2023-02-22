@@ -1,19 +1,33 @@
-import file_operation
 import Note
-import ui
-
-number = 6  # сколько знаков МИНИМУМ может быть в тексте заметки
 
 
-def add():
-    note = ui.create_note(number)
-    array = file_operation.read_file()
+
+def write_file(array, mode):
+    file = open("notes.csv", mode='w', encoding='utf-8')
+    file.seek(0)
+    file.close()
+    file = open("notes.csv", mode=mode, encoding='utf-8')
     for notes in array:
-        if Note.Note.get_id(note) == Note.Note.get_id(notes):
-            Note.Note.set_id(note)
-    array.append(note)
-    file_operation.write_file(array, 'a')
-    print('Заметка добавлена...')
+        file.write(Note.Note.to_string(notes))
+        file.write('\n')
+    file.close
+
+
+def read_file():
+    try:
+        array = []
+        file = open("notes.csv", "r", encoding='utf-8')
+        notes = file.read().strip().split("\n")
+        for n in notes:
+            split_n = n.split(';')
+            note = Note.Note(
+                id = split_n[0], title = split_n[1], body = split_n[2], date = split_n[3])
+            array.append(note)
+    except Exception:
+        print('Нет сохраненных заметок...')
+    finally:
+        return array
+
 
 
 def show(text):
