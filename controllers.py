@@ -1,6 +1,7 @@
 import function as f
 import ui
 
+
 def run():
     input_from_user = ''
     while input_from_user != '7':
